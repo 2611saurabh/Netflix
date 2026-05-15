@@ -29,14 +29,14 @@ public class ContentController {
     public ResponseEntity<MoviesResponse> addMovie(@Valid @RequestBody MoviesRequest moviesRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(contentService.addMovie(moviesRequest);
+                .body(contentService.addMovie(moviesRequest));
     }
 
     //Get All movie
     @GetMapping
     public ResponseEntity<List<MoviesResponse>> getAllMovies(){
 
-        return ResponseEntity.ok(contentService.getAllMovies);
+        return ResponseEntity.ok(contentService.getAllMovies());
 
     }
 
@@ -61,6 +61,6 @@ public class ContentController {
     @GetMapping("/search")
     public ResponseEntity<List<MoviesResponse>> searchMovies(@RequestParam String title){
 
-        return ResponseEntity.ok(contentService.searchMovie(title);
+        return ResponseEntity.ok(contentService.searchMovie(title));
     }
 }

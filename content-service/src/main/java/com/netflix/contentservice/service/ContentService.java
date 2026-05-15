@@ -54,8 +54,7 @@ public class ContentService {
     /*
     *Get all movies in catlog
     */
-    public List<MoviesResponse> getAllMovies(MoviesRequest request){
-        log.info("Getting all movies: {}", request.getTitle());
+    public List<MoviesResponse> getAllMovies(){
 
         return movieRepository.findAll().stream()
                 .map(this::mapToResponse)
@@ -83,6 +82,36 @@ public class ContentService {
 
         return movieRepository.findByGenre(genre)
                 .stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+
+    public List<MoviesResponse> searchMovie(String title){
+
+        return movieRepository.findByTitleContainingIgnoreCase(title).stream()
+                .map(this::mapToResponse).collect(Collectors.toList());
+
+    }
+
+    public void updateVideoKey(String movieId, String videoKey){
+
+        log.info("Updating videokey for movie {}", movieId);
+
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new RuntimeException("Movie not found: {}"+movieId));
+        movie.setVideoKey(videoKey);
+        movie.setVideoStatus(VideoStatus.UPLOADED);
+        movieRepository.save(movie);
+
+    }
+
+    public void updateHlsUrl(String movieId, String hlsUrl){
+        log.info("Updating HLS url for movie {}", movieId);
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new RuntimeException("Movie not found: {}"+movieId));
+
+        movie.setHlsUrl(hlsUrl);
+        movie.setVideoStatus(VideoStatus.READY);
+        movieRepository.save(movie);
+        log.info("Movie {} is now ready for streaming", movieId);
+
     }
 
 
